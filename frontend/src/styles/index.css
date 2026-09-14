@@ -1,3 +1,63 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-base text-ink-primary font-body antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading;
+  }
+
+  /* Consistent focus visibility across native elements not covered by our components */
+  :focus-visible {
+    outline: 2px solid theme('colors.accent.DEFAULT');
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* ---------------------------------------------------------------------
+   * Type scale — real hierarchy via family + weight + tracking, not just size.
+   * ------------------------------------------------------------------- */
+  .text-h1 {
+    @apply font-heading font-bold text-4xl leading-tight tracking-tight;
+  }
+  .text-h2 {
+    @apply font-heading font-semibold text-3xl leading-tight tracking-tight;
+  }
+  .text-h3 {
+    @apply font-heading font-semibold text-2xl leading-snug tracking-tight;
+  }
+  .text-h4 {
+    @apply font-heading font-semibold text-lg leading-snug;
+  }
+  .text-body {
+    @apply font-body font-normal text-base leading-relaxed;
+  }
+  .text-small {
+    @apply font-body font-normal text-sm leading-normal;
+  }
+  .text-label {
+    @apply font-body font-semibold text-xs uppercase tracking-wider;
+  }
+
+  /* A barely-there radial glow, meant to sit behind a single focal element
+   * (e.g. the auth card). Not a hero gradient — deliberately subtle. */
+  .bg-glow {
+    background-image: radial-gradient(
+      circle at 50% 0%,
+      rgba(224, 172, 69, 0.10) 0%,
+      rgba(224, 172, 69, 0) 60%
+    );
+  }
+}
