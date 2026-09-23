@@ -48,7 +48,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-            if (jwtService.isTokenValid(token, userDetails.getUsername())) {
+            boolean tokenValid = jwtService.isTokenValid(token, userDetails.getUsername());
+            // Re-checked on every request (not just at login) so a token issued before
+            // deactivation/suspension stops working as soon as the account status changes.
+            boolean accountUsable = userDetails.isEnabled() && userDetails.isAccountNonLocked();
+            if (tokenValid && accountUsable) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

@@ -4,13 +4,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.recruitsystem.dto.auth.AuthResponse;
 import com.recruitsystem.dto.auth.RegisterRequest;
+import com.recruitsystem.dto.company.CreateClientCompanyRequest;
 import com.recruitsystem.entity.auth.JobSeeker;
+import com.recruitsystem.entity.auth.Recruiter;
 import com.recruitsystem.entity.auth.UserRole;
+import com.recruitsystem.entity.company.ClientCompany;
 import com.recruitsystem.exception.DuplicateResourceException;
+import com.recruitsystem.exception.ResourceNotFoundException;
+import com.recruitsystem.exception.ValidationException;
 import com.recruitsystem.repository.auth.HrExecutiveRepository;
 import com.recruitsystem.repository.auth.InterviewPanelMemberRepository;
 import com.recruitsystem.repository.auth.JobSeekerRepository;
@@ -19,6 +27,7 @@ import com.recruitsystem.repository.auth.SystemAdministratorRepository;
 import com.recruitsystem.repository.auth.UserRepository;
 import com.recruitsystem.repository.company.ClientCompanyRepository;
 import com.recruitsystem.security.JwtService;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -106,5 +115,92 @@ class AuthServiceImplTest {
         assertThat(response.getUserId()).isEqualTo(1L);
         assertThat(response.getEmail()).isEqualTo(request.getEmail());
         assertThat(response.getRole()).isEqualTo(UserRole.JOB_SEEKER);
+    }
+
+    private RegisterRequest recruiterRequest() {
+        RegisterRequest request = new RegisterRequest();
+        request.setEmail("rita@example.com");
+        request.setName("Rita Recruiter");
+        request.setPassword("password123");
+        request.setRole(UserRole.RECRUITER);
+        return request;
+    }
+
+    @Test
+    void register_recruiterWithExistingCompany_linksIt() {
+        RegisterRequest request = recruiterRequest();
+        request.setClientCompanyId(10L);
+
+        ClientCompany company = ClientCompany.builder().id(10L).companyName("Acme Corp").build();
+        when(userRepository.existsByEmail(request.getEmail())).thenReturn(false);
+        when(passwordEncoder.encode(request.getPassword())).thenReturn("hashed");
+        when(clientCompanyRepository.findById(10L)).thenReturn(Optional.of(company));
+        when(recruiterRepository.save(any(Recruiter.class))).thenAnswer(invocation -> {
+            Recruiter recruiter = invocation.getArgument(0);
+            recruiter.setId(1L);
+            return recruiter;
+        });
+        when(jwtService.generateToken(anyString(), any())).thenReturn("token");
+
+        authService.register(request);
+
+        verify(clientCompanyRepository, never()).save(any());
+    }
+
+    @Test
+    void register_recruiterWithNewCompanyDetails_createsIt() {
+        RegisterRequest request = recruiterRequest();
+        CreateClientCompanyRequest newCompany = new CreateClientCompanyRequest();
+        newCompany.setCompanyName("Brand New Co");
+        request.setNewClientCompany(newCompany);
+
+        when(userRepository.existsByEmail(request.getEmail())).thenReturn(false);
+        when(passwordEncoder.encode(request.getPassword())).thenReturn("hashed");
+        when(clientCompanyRepository.save(any(ClientCompany.class))).thenAnswer(invocation -> {
+            ClientCompany company = invocation.getArgument(0);
+            company.setId(20L);
+            return company;
+        });
+        when(recruiterRepository.save(any(Recruiter.class))).thenAnswer(invocation -> {
+            Recruiter recruiter = invocation.getArgument(0);
+            recruiter.setId(2L);
+            return recruiter;
+        });
+        when(jwtService.generateToken(anyString(), any())).thenReturn("token");
+
+        authService.register(request);
+
+        verify(clientCompanyRepository).save(argThat(company -> "Brand New Co".equals(company.getCompanyName())));
+    }
+
+    @Test
+    void register_recruiterWithNeitherCompanyOption_throws() {
+        RegisterRequest request = recruiterRequest();
+        when(userRepository.existsByEmail(request.getEmail())).thenReturn(false);
+        when(passwordEncoder.encode(request.getPassword())).thenReturn("hashed");
+
+        assertThatThrownBy(() -> authService.register(request)).isInstanceOf(ValidationException.class);
+    }
+
+    @Test
+    void register_recruiterWithBothCompanyOptions_throws() {
+        RegisterRequest request = recruiterRequest();
+        request.setClientCompanyId(10L);
+        request.setNewClientCompany(new CreateClientCompanyRequest());
+        when(userRepository.existsByEmail(request.getEmail())).thenReturn(false);
+        when(passwordEncoder.encode(request.getPassword())).thenReturn("hashed");
+
+        assertThatThrownBy(() -> authService.register(request)).isInstanceOf(ValidationException.class);
+    }
+
+    @Test
+    void register_recruiterWithUnknownCompanyId_throwsNotFound() {
+        RegisterRequest request = recruiterRequest();
+        request.setClientCompanyId(999L);
+        when(userRepository.existsByEmail(request.getEmail())).thenReturn(false);
+        when(passwordEncoder.encode(request.getPassword())).thenReturn("hashed");
+        when(clientCompanyRepository.findById(999L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> authService.register(request)).isInstanceOf(ResourceNotFoundException.class);
     }
 }
