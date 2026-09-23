@@ -1,6 +1,8 @@
 package com.recruitsystem.dto.auth;
 
+import com.recruitsystem.dto.company.CreateClientCompanyRequest;
 import com.recruitsystem.entity.auth.UserRole;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -28,6 +30,13 @@ public class RegisterRequest {
     @NotNull
     private UserRole role;
 
-    /** Optional; only meaningful for RECRUITER and HR_EXECUTIVE roles. */
+    /**
+     * Only meaningful for RECRUITER and HR_EXECUTIVE roles, which must
+     * provide exactly one of these two: either the id of an existing
+     * company, or the details to create a new one.
+     */
     private Long clientCompanyId;
+
+    @Valid
+    private CreateClientCompanyRequest newClientCompany;
 }

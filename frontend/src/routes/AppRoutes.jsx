@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import LoginPage from '../pages/auth/LoginPage'
 import RegisterPage from '../pages/auth/RegisterPage'
+import ProfilePage from '../pages/auth/ProfilePage'
 import CandidateDashboardPage from '../pages/CandidateDashboardPage'
 import RecruiterDashboardPage from '../pages/RecruiterDashboardPage'
 import AdminDashboardPage from '../pages/AdminDashboardPage'
@@ -8,6 +9,7 @@ import CandidateLayout from '../layouts/CandidateLayout'
 import RecruiterLayout from '../layouts/RecruiterLayout'
 import AdminLayout from '../layouts/AdminLayout'
 import ProtectedRoute from './ProtectedRoute'
+import PortalLayoutForRole from './PortalLayoutForRole'
 import { ADMIN_ROLES, CANDIDATE_ROLES, RECRUITER_HR_ROLES } from '../utils/roles'
 
 export default function AppRoutes() {
@@ -32,6 +34,12 @@ export default function AppRoutes() {
       <Route element={<ProtectedRoute allowedRoles={ADMIN_ROLES} />}>
         <Route element={<AdminLayout />}>
           <Route path="/admin" element={<AdminDashboardPage />} />
+        </Route>
+      </Route>
+
+      <Route element={<ProtectedRoute />}>
+        <Route element={<PortalLayoutForRole />}>
+          <Route path="/profile" element={<ProfilePage />} />
         </Route>
       </Route>
 

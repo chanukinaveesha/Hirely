@@ -10,9 +10,11 @@ import com.recruitsystem.entity.auth.JobSeeker;
 import com.recruitsystem.entity.auth.Recruiter;
 import com.recruitsystem.entity.auth.SystemAdministrator;
 import com.recruitsystem.entity.auth.User;
+import com.recruitsystem.dto.company.CreateClientCompanyRequest;
 import com.recruitsystem.entity.company.ClientCompany;
 import com.recruitsystem.exception.DuplicateResourceException;
 import com.recruitsystem.exception.ResourceNotFoundException;
+import com.recruitsystem.exception.ValidationException;
 import com.recruitsystem.repository.auth.HrExecutiveRepository;
 import com.recruitsystem.repository.auth.InterviewPanelMemberRepository;
 import com.recruitsystem.repository.auth.JobSeekerRepository;
@@ -88,7 +90,7 @@ public class AuthServiceImpl implements AuthService {
                     .passwordHash(hashedPassword)
                     .phone(request.getPhone())
                     .accountStatus(AccountStatus.ACTIVE)
-                    .clientCompany(resolveClientCompany(request.getClientCompanyId()))
+                    .clientCompany(resolveClientCompany(request))
                     .build();
             case HR_EXECUTIVE -> HrExecutive.builder()
                     .name(request.getName())
@@ -96,7 +98,7 @@ public class AuthServiceImpl implements AuthService {
                     .passwordHash(hashedPassword)
                     .phone(request.getPhone())
                     .accountStatus(AccountStatus.ACTIVE)
-                    .clientCompany(resolveClientCompany(request.getClientCompanyId()))
+                    .clientCompany(resolveClientCompany(request))
                     .build();
             case INTERVIEW_PANEL_MEMBER -> InterviewPanelMember.builder()
                     .name(request.getName())
@@ -115,12 +117,29 @@ public class AuthServiceImpl implements AuthService {
         };
     }
 
-    private ClientCompany resolveClientCompany(Long clientCompanyId) {
-        if (clientCompanyId == null) {
-            return null;
+    private ClientCompany resolveClientCompany(RegisterRequest request) {
+        Long clientCompanyId = request.getClientCompanyId();
+        CreateClientCompanyRequest newClientCompany = request.getNewClientCompany();
+
+        if (clientCompanyId != null && newClientCompany != null) {
+            throw new ValidationException("Provide either an existing client company or details for a new one, not both");
         }
-        return clientCompanyRepository.findById(clientCompanyId)
-                .orElseThrow(() -> new ResourceNotFoundException("Client company not found: " + clientCompanyId));
+        if (clientCompanyId != null) {
+            return clientCompanyRepository.findById(clientCompanyId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Client company not found: " + clientCompanyId));
+        }
+        if (newClientCompany != null) {
+            ClientCompany company = ClientCompany.builder()
+                    .companyName(newClientCompany.getCompanyName())
+                    .industry(newClientCompany.getIndustry())
+                    .description(newClientCompany.getDescription())
+                    .address(newClientCompany.getAddress())
+                    .phone(newClientCompany.getPhone())
+                    .email(newClientCompany.getEmail())
+                    .build();
+            return clientCompanyRepository.save(company);
+        }
+        throw new ValidationException("Select an existing client company or provide details to create a new one");
     }
 
     private User persist(User user) {
