@@ -73,3 +73,10 @@ stage many files, list them explicitly or use a targeted path.
 - Frontend: put module-specific components/pages under
   `components/<module>` and `pages/<module>`; shared UI goes in
   `components/common`.
+- If your module adds a route that must be reachable by every role but
+  still needs portal chrome (nav/header) — e.g. a shared profile or detail
+  page — import `PortalLayoutForRole` from `frontend/src/routes/` and wrap
+  your route with it, the same way `ProtectedRoute` is used. **Don't**
+  redefine your own role-picking layout helper in `AppRoutes.jsx`; two
+  modules independently doing that is exactly the kind of diff that
+  conflicts when both land on the same branch.
