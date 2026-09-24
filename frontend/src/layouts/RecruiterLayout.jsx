@@ -1,7 +1,10 @@
 import { Outlet } from 'react-router-dom'
 import PortalHeader from './PortalHeader'
 
-const NAV_ITEMS = [{ to: '/recruiter', label: 'Dashboard' }]
+const NAV_ITEMS = [
+  { to: '/recruiter', label: 'Dashboard', end: true },
+  { to: '/recruiter/vacancies', label: 'Vacancies' },
+]
 
 export default function RecruiterLayout() {
   return (

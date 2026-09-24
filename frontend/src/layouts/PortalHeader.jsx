@@ -1,5 +1,4 @@
-
-import { Link, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { useAuthStore } from '../auth/authStore'
 import { Avatar, Button } from '../components/common'
 import { cn } from '../utils/cn'
@@ -21,6 +20,7 @@ export default function PortalHeader({ title, navItems = [] }) {
               <NavLink
                 key={item.to}
                 to={item.to}
+                end={item.end}
                 className={({ isActive }) =>
                   cn(
                     'text-small font-medium transition-colors',
@@ -34,10 +34,8 @@ export default function PortalHeader({ title, navItems = [] }) {
           </nav>
         </div>
         <div className="flex items-center gap-3">
-          <Link to="/profile" className="flex items-center gap-2 hover:opacity-80">
-            <Avatar name={user?.name} size="sm" />
-            <span className="text-small text-ink-secondary">{user?.name}</span>
-          </Link>
+          <Avatar name={user?.name} size="sm" />
+          <span className="text-small text-ink-secondary">{user?.name}</span>
           <Button variant="ghost" size="sm" onClick={logout}>
             Logout
           </Button>

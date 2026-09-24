@@ -1,10 +1,12 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import LoginPage from '../pages/auth/LoginPage'
 import RegisterPage from '../pages/auth/RegisterPage'
-import ProfilePage from '../pages/auth/ProfilePage'
 import CandidateDashboardPage from '../pages/CandidateDashboardPage'
 import RecruiterDashboardPage from '../pages/RecruiterDashboardPage'
 import AdminDashboardPage from '../pages/AdminDashboardPage'
+import VacancyFormPage from '../pages/vacancy/VacancyFormPage'
+import MyVacanciesPage from '../pages/vacancy/MyVacanciesPage'
+import VacancyDetailPage from '../pages/vacancy/VacancyDetailPage'
 import CandidateLayout from '../layouts/CandidateLayout'
 import RecruiterLayout from '../layouts/RecruiterLayout'
 import AdminLayout from '../layouts/AdminLayout'
@@ -28,6 +30,9 @@ export default function AppRoutes() {
       <Route element={<ProtectedRoute allowedRoles={RECRUITER_HR_ROLES} />}>
         <Route element={<RecruiterLayout />}>
           <Route path="/recruiter" element={<RecruiterDashboardPage />} />
+          <Route path="/recruiter/vacancies" element={<MyVacanciesPage />} />
+          <Route path="/recruiter/vacancies/new" element={<VacancyFormPage />} />
+          <Route path="/recruiter/vacancies/:id/edit" element={<VacancyFormPage />} />
         </Route>
       </Route>
 
@@ -39,7 +44,7 @@ export default function AppRoutes() {
 
       <Route element={<ProtectedRoute />}>
         <Route element={<PortalLayoutForRole />}>
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/vacancies/:id" element={<VacancyDetailPage />} />
         </Route>
       </Route>
 
