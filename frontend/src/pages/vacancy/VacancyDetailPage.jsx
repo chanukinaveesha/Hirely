@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getVacancy } from '../../api/vacancyApi'
+import { applyToVacancy } from '../../api/applicationApi'
 import { useAuthStore } from '../../auth/authStore'
+import { ROLES } from '../../utils/roles'
 import VacancyStatusBadge from '../../components/vacancy/VacancyStatusBadge'
 import { Button, Card, LoadingSpinner, toast } from '../../components/common'
 
@@ -9,9 +11,12 @@ export default function VacancyDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const currentUserId = useAuthStore((state) => state.user?.userId)
+  const role = useAuthStore((state) => state.role)
 
   const [vacancy, setVacancy] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [applying, setApplying] = useState(false)
+  const [applied, setApplied] = useState(false)
 
   useEffect(() => {
     getVacancy(id)
@@ -27,6 +32,21 @@ export default function VacancyDetailPage() {
   if (!vacancy) return null
 
   const isOwner = vacancy.postedByUserId === currentUserId
+  const deadlinePassed = new Date(vacancy.deadline) < new Date(new Date().toDateString())
+  const canApply = role === ROLES.JOB_SEEKER && vacancy.status === 'PUBLISHED' && !deadlinePassed
+
+  async function handleApply() {
+    setApplying(true)
+    try {
+      await applyToVacancy(vacancy.id)
+      setApplied(true)
+      toast.success('Application submitted.')
+    } catch (err) {
+      toast.error(err.message)
+    } finally {
+      setApplying(false)
+    }
+  }
 
   return (
     <Card padding="lg" className="mx-auto max-w-3xl">
@@ -69,6 +89,12 @@ export default function VacancyDetailPage() {
         <Link to={`/recruiter/vacancies/${vacancy.id}/edit`}>
           <Button variant="secondary">Edit this vacancy</Button>
         </Link>
+      )}
+
+      {canApply && (
+        <Button onClick={handleApply} loading={applying} disabled={applied}>
+          {applied ? 'Applied' : 'Apply for this role'}
+        </Button>
       )}
     </Card>
   )

@@ -1,6 +1,7 @@
 package com.recruitsystem.entity.application;
 
 import com.recruitsystem.entity.auth.JobSeeker;
+import com.recruitsystem.entity.vacancy.JobVacancy;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -38,10 +39,9 @@ public class Application {
     @JoinColumn(name = "job_seeker_id", nullable = false)
     private JobSeeker jobSeeker;
 
-    // Plain FK column, not a JPA relationship: the Vacancy entity is owned by
-    // the vacancy module and does not exist in this foundation phase.
-    @Column(name = "vacancy_id", nullable = false)
-    private Long vacancyId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vacancy_id", nullable = false)
+    private JobVacancy vacancy;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
