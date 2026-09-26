@@ -7,6 +7,8 @@ import AdminDashboardPage from '../pages/AdminDashboardPage'
 import VacancyFormPage from '../pages/vacancy/VacancyFormPage'
 import MyVacanciesPage from '../pages/vacancy/MyVacanciesPage'
 import VacancyDetailPage from '../pages/vacancy/VacancyDetailPage'
+import VacancySearchPage from '../pages/application/VacancySearchPage'
+import MyApplicationsPage from '../pages/application/MyApplicationsPage'
 import CandidateLayout from '../layouts/CandidateLayout'
 import RecruiterLayout from '../layouts/RecruiterLayout'
 import AdminLayout from '../layouts/AdminLayout'
@@ -24,6 +26,8 @@ export default function AppRoutes() {
       <Route element={<ProtectedRoute allowedRoles={CANDIDATE_ROLES} />}>
         <Route element={<CandidateLayout />}>
           <Route path="/candidate" element={<CandidateDashboardPage />} />
+          <Route path="/jobs" element={<VacancySearchPage />} />
+          <Route path="/applications" element={<MyApplicationsPage />} />
         </Route>
       </Route>
 
