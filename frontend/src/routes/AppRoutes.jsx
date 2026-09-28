@@ -9,6 +9,8 @@ import MyVacanciesPage from '../pages/vacancy/MyVacanciesPage'
 import VacancyDetailPage from '../pages/vacancy/VacancyDetailPage'
 import VacancySearchPage from '../pages/application/VacancySearchPage'
 import MyApplicationsPage from '../pages/application/MyApplicationsPage'
+import MyResumePage from '../pages/resume/MyResumePage'
+import ApplicationReviewPage from '../pages/resume/ApplicationReviewPage'
 import CandidateLayout from '../layouts/CandidateLayout'
 import RecruiterLayout from '../layouts/RecruiterLayout'
 import AdminLayout from '../layouts/AdminLayout'
@@ -28,6 +30,7 @@ export default function AppRoutes() {
           <Route path="/candidate" element={<CandidateDashboardPage />} />
           <Route path="/jobs" element={<VacancySearchPage />} />
           <Route path="/applications" element={<MyApplicationsPage />} />
+          <Route path="/resume" element={<MyResumePage />} />
         </Route>
       </Route>
 
@@ -37,6 +40,7 @@ export default function AppRoutes() {
           <Route path="/recruiter/vacancies" element={<MyVacanciesPage />} />
           <Route path="/recruiter/vacancies/new" element={<VacancyFormPage />} />
           <Route path="/recruiter/vacancies/:id/edit" element={<VacancyFormPage />} />
+          <Route path="/recruiter/vacancies/:vacancyId/applicants" element={<ApplicationReviewPage />} />
         </Route>
       </Route>
 
