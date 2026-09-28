@@ -101,6 +101,11 @@ export default function MyVacanciesPage() {
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-2">
+                    <Link to={`/recruiter/vacancies/${vacancy.id}/applicants`}>
+                      <Button size="sm" variant="ghost">
+                        Applicants
+                      </Button>
+                    </Link>
                     {vacancy.status !== 'CLOSED' && (
                       <Link to={`/recruiter/vacancies/${vacancy.id}/edit`}>
                         <Button size="sm" variant="ghost">
