@@ -5,6 +5,7 @@ const NAV_ITEMS = [
   { to: '/candidate', label: 'Dashboard', end: true },
   { to: '/jobs', label: 'Search Jobs' },
   { to: '/applications', label: 'My Applications' },
+  { to: '/resume', label: 'My Resume' },
 ]
 
 export default function CandidateLayout() {
