@@ -20,6 +20,7 @@ export default function PortalHeader({ title, navItems = [] }) {
               <NavLink
                 key={item.to}
                 to={item.to}
+                end={item.end}
                 className={({ isActive }) =>
                   cn(
                     'text-small font-medium transition-colors',
