@@ -1,0 +1,13 @@
+// Mirrors com.recruitsystem.entity.interview.InterviewStatus.
+export const INTERVIEW_STATUS_BADGE_VARIANT = {
+  PROPOSED: 'info',
+  RESCHEDULE_REQUESTED: 'warning',
+  CONFIRMED: 'success',
+  CANCELLED: 'error',
+}
+
+export const ACCEPTABLE_INTERVIEW_STATUSES = ['PROPOSED', 'RESCHEDULE_REQUESTED']
+
+export const SCHEDULABLE_APPLICATION_STATUSES = ['SHORTLISTED', 'INTERVIEWING']
+
+export const SELECTABLE_APPLICATION_STATUSES = ['SHORTLISTED', 'INTERVIEWING', 'ASSESSED']
