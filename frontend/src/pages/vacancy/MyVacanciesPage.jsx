@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { closeVacancy, getMyVacancies, publishVacancy } from '../../api/vacancyApi'
 import VacancyStatusBadge from '../../components/vacancy/VacancyStatusBadge'
+import { useAuthStore } from '../../auth/authStore'
+import { ROLES } from '../../utils/roles'
 import {
   Button,
   Card,
@@ -18,6 +20,7 @@ import {
 } from '../../components/common'
 
 export default function MyVacanciesPage() {
+  const isHrExecutive = useAuthStore((state) => state.role) === ROLES.HR_EXECUTIVE
   const [vacancies, setVacancies] = useState([])
   const [loading, setLoading] = useState(true)
   const [actioningId, setActioningId] = useState(null)
@@ -106,6 +109,15 @@ export default function MyVacanciesPage() {
                         Applicants
                       </Button>
                     </Link>
+
+ {isHrExecutive && (
+                      <Link to={`/recruiter/vacancies/${vacancy.id}/assessments/compare`}>
+                        <Button size="sm" variant="ghost">
+                          Compare Assessments
+                        </Button>
+                      </Link>
+                    )}
+
                     {vacancy.status !== 'CLOSED' && (
                       <Link to={`/recruiter/vacancies/${vacancy.id}/edit`}>
                         <Button size="sm" variant="ghost">

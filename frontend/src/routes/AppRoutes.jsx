@@ -19,6 +19,10 @@ import RecruiterLayout from '../layouts/RecruiterLayout'
 import AdminLayout from '../layouts/AdminLayout'
 import ProtectedRoute from './ProtectedRoute'
 import PortalLayoutForRole from './PortalLayoutForRole'
+import MyAssessmentsPage from '../pages/assessment/MyAssessmentsPage'
+import AssignAssessmentPage from '../pages/assessment/AssignAssessmentPage'
+import CompareAssessmentsPage from '../pages/assessment/CompareAssessmentsPage'
+import MyCandidateAssessmentsPage from '../pages/assessment/MyCandidateAssessmentsPage'
 import {
   ADMIN_ROLES,
   CANDIDATE_ROLES,
@@ -39,6 +43,7 @@ export default function AppRoutes() {
           <Route path="/applications" element={<MyApplicationsPage />} />
           <Route path="/resume" element={<MyResumePage />} />
           <Route path="/interviews" element={<MyInterviewsPage />} />
+          <Route path="/assessments" element={<MyCandidateAssessmentsPage />} />
         </Route>
       </Route>
 
@@ -66,6 +71,9 @@ export default function AppRoutes() {
             path="/recruiter/panel-interviews"
             element={<PanelInterviewsPage />}
           />
+          <Route path="/recruiter/assessments" element={<MyAssessmentsPage />} />
+          <Route path="/recruiter/applications/:applicationId/assessments/assign" element={<AssignAssessmentPage />} />
+          <Route path="/recruiter/vacancies/:vacancyId/assessments/compare" element={<CompareAssessmentsPage />} />
         </Route>
       </Route>
 
