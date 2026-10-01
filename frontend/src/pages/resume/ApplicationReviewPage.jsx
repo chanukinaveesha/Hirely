@@ -11,6 +11,8 @@ import {
   SCHEDULABLE_APPLICATION_STATUSES,
   SELECTABLE_APPLICATION_STATUSES,
 } from '../../utils/interviewOptions'
+import { useAuthStore } from '../../auth/authStore'
+import { ROLES } from '../../utils/roles'
 import ApplicationStatusBadge from '../../components/application/ApplicationStatusBadge'
 import {
   Button,
@@ -33,7 +35,7 @@ const SHORTLISTABLE_FROM = ['SUBMITTED', 'UNDER_REVIEW']
 export default function ApplicationReviewPage() {
   const { vacancyId } = useParams()
   const navigate = useNavigate()
-
+  const isHrExecutive = useAuthStore((state) => state.role) === ROLES.HR_EXECUTIVE
   const [applicants, setApplicants] = useState([])
   const [loading, setLoading] = useState(true)
   const [actioningId, setActioningId] = useState(null)
@@ -99,6 +101,12 @@ export default function ApplicationReviewPage() {
         candidateName: applicant.jobSeekerName,
         vacancyTitle: applicant.vacancyTitle,
       },
+    })
+  }
+
+  function handleAssignAssessment(applicant) {
+    navigate(`/recruiter/applications/${applicant.id}/assessments/assign`, {
+      state: { candidateName: applicant.jobSeekerName, vacancyTitle: applicant.vacancyTitle },
     })
   }
 
@@ -198,6 +206,12 @@ export default function ApplicationReviewPage() {
                         }
                       >
                         Schedule Interview
+                      </Button>
+                    )}
+
+{isHrExecutive && ASSIGNABLE_APPLICATION_STATUSES.includes(applicant.status) && (
+                      <Button size="sm" variant="secondary" onClick={() => handleAssignAssessment(applicant)}>
+                        Assign Assessment
                       </Button>
                     )}
 
