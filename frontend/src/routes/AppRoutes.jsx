@@ -9,12 +9,25 @@ import MyVacanciesPage from '../pages/vacancy/MyVacanciesPage'
 import VacancyDetailPage from '../pages/vacancy/VacancyDetailPage'
 import VacancySearchPage from '../pages/application/VacancySearchPage'
 import MyApplicationsPage from '../pages/application/MyApplicationsPage'
+import MyResumePage from '../pages/resume/MyResumePage'
+import ApplicationReviewPage from '../pages/resume/ApplicationReviewPage'
+import ScheduleInterviewPage from '../pages/interview/ScheduleInterviewPage'
+import MyInterviewsPage from '../pages/interview/MyInterviewsPage'
+import PanelInterviewsPage from '../pages/interview/PanelInterviewsPage'
 import CandidateLayout from '../layouts/CandidateLayout'
 import RecruiterLayout from '../layouts/RecruiterLayout'
 import AdminLayout from '../layouts/AdminLayout'
 import ProtectedRoute from './ProtectedRoute'
 import PortalLayoutForRole from './PortalLayoutForRole'
-import { ADMIN_ROLES, CANDIDATE_ROLES, RECRUITER_HR_ROLES } from '../utils/roles'
+import MyAssessmentsPage from '../pages/assessment/MyAssessmentsPage'
+import AssignAssessmentPage from '../pages/assessment/AssignAssessmentPage'
+import CompareAssessmentsPage from '../pages/assessment/CompareAssessmentsPage'
+import MyCandidateAssessmentsPage from '../pages/assessment/MyCandidateAssessmentsPage'
+import {
+  ADMIN_ROLES,
+  CANDIDATE_ROLES,
+  RECRUITER_HR_ROLES,
+} from '../utils/roles'
 
 export default function AppRoutes() {
   return (
@@ -28,6 +41,9 @@ export default function AppRoutes() {
           <Route path="/candidate" element={<CandidateDashboardPage />} />
           <Route path="/jobs" element={<VacancySearchPage />} />
           <Route path="/applications" element={<MyApplicationsPage />} />
+          <Route path="/resume" element={<MyResumePage />} />
+          <Route path="/interviews" element={<MyInterviewsPage />} />
+          <Route path="/assessments" element={<MyCandidateAssessmentsPage />} />
         </Route>
       </Route>
 
@@ -35,8 +51,29 @@ export default function AppRoutes() {
         <Route element={<RecruiterLayout />}>
           <Route path="/recruiter" element={<RecruiterDashboardPage />} />
           <Route path="/recruiter/vacancies" element={<MyVacanciesPage />} />
-          <Route path="/recruiter/vacancies/new" element={<VacancyFormPage />} />
-          <Route path="/recruiter/vacancies/:id/edit" element={<VacancyFormPage />} />
+          <Route
+            path="/recruiter/vacancies/new"
+            element={<VacancyFormPage />}
+          />
+          <Route
+            path="/recruiter/vacancies/:id/edit"
+            element={<VacancyFormPage />}
+          />
+          <Route
+            path="/recruiter/vacancies/:vacancyId/applicants"
+            element={<ApplicationReviewPage />}
+          />
+          <Route
+            path="/recruiter/applications/:applicationId/interviews"
+            element={<ScheduleInterviewPage />}
+          />
+          <Route
+            path="/recruiter/panel-interviews"
+            element={<PanelInterviewsPage />}
+          />
+          <Route path="/recruiter/assessments" element={<MyAssessmentsPage />} />
+          <Route path="/recruiter/applications/:applicationId/assessments/assign" element={<AssignAssessmentPage />} />
+          <Route path="/recruiter/vacancies/:vacancyId/assessments/compare" element={<CompareAssessmentsPage />} />
         </Route>
       </Route>
 
