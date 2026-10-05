@@ -9,9 +9,14 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class AdminDashboardSection {
+public class AdminDashboardSection implements DashboardSection {
 
     private long totalUsers;
     private long totalVacancies;
     private Map<UserRole, Long> usersByRole;
+
+    @Override
+    public void applyTo(DashboardResponse.DashboardResponseBuilder builder) {
+        builder.admin(this);
+    }
 }

@@ -9,7 +9,12 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class PanelDashboardSection {
+public class PanelDashboardSection implements DashboardSection {
 
     private List<InterviewResponse> upcomingInterviews;
+
+    @Override
+    public void applyTo(DashboardResponse.DashboardResponseBuilder builder) {
+        builder.panel(this);
+    }
 }

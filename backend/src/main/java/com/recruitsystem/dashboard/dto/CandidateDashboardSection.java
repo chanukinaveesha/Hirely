@@ -12,11 +12,16 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class CandidateDashboardSection {
+public class CandidateDashboardSection implements DashboardSection {
 
     private Map<ApplicationStatus, Long> applicationCountsByStatus;
     private List<InterviewResponse> upcomingInterviews;
     private List<CandidateAssessmentResponse> assignedAssessments;
     private boolean resumeOnFile;
     private String resumeFileName;
+
+    @Override
+    public void applyTo(DashboardResponse.DashboardResponseBuilder builder) {
+        builder.candidate(this);
+    }
 }
