@@ -2,6 +2,8 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import LoginPage from '../pages/auth/LoginPage'
 import RegisterPage from '../pages/auth/RegisterPage'
 import ProfilePage from '../pages/auth/ProfilePage'
+import PostFeedPage from '../pages/post/PostFeedPage'
+import PublicProfilePage from '../pages/profile/PublicProfilePage'
 import CandidateDashboardPage from '../pages/CandidateDashboardPage'
 import RecruiterDashboardPage from '../pages/RecruiterDashboardPage'
 import AdminDashboardPage from '../pages/AdminDashboardPage'
@@ -88,6 +90,8 @@ export default function AppRoutes() {
         <Route element={<PortalLayoutForRole />}>
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/vacancies/:id" element={<VacancyDetailPage />} />
+          <Route path="/posts" element={<PostFeedPage />} />
+          <Route path="/people/:userId" element={<PublicProfilePage />} />
         </Route>
       </Route>
 

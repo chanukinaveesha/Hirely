@@ -1,0 +1,51 @@
+/*
+ * Hirely platform theme tokens — CSS variables mirroring tailwind.config.js's
+ * existing palette/fonts/radii. New platform components style primarily with
+ * the existing Tailwind utility classes (bg-surface, text-ink-primary, etc.);
+ * these variables exist only for the raw-CSS spots Tailwind classes can't
+ * reach (e.g. the logo wordmark's gradient text).
+ */
+
+:root {
+  --hirely-color-base: #0b0d10;
+  --hirely-color-surface: #14171c;
+  --hirely-color-elevated: #1c2026;
+
+  --hirely-color-line: #262b31;
+  --hirely-color-line-strong: #333940;
+
+  --hirely-color-ink-primary: #edebe6;
+  --hirely-color-ink-secondary: #a6a29b;
+  --hirely-color-ink-muted: #6e6a63;
+  --hirely-color-ink-inverse: #0b0d10;
+
+  --hirely-color-accent: #e0ac45;
+  --hirely-color-accent-hover: #eabd5f;
+  --hirely-color-accent-active: #c6923a;
+  --hirely-color-accent-subtle: #2e2818;
+
+  --hirely-color-secondary: #4f8f8a;
+  --hirely-color-secondary-hover: #5fa39d;
+  --hirely-color-secondary-active: #437a76;
+  --hirely-color-secondary-subtle: #1b2624;
+
+  --hirely-color-success: #5fae7b;
+  --hirely-color-error: #d2665f;
+  --hirely-color-warning: #c99a4a;
+  --hirely-color-info: #5a82a8;
+
+  --hirely-font-heading: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --hirely-font-body: Inter, ui-sans-serif, system-ui, sans-serif;
+
+  --hirely-radius-sm: 6px;
+  --hirely-radius-md: 10px;
+  --hirely-radius-lg: 16px;
+  --hirely-radius-xl: 20px;
+  --hirely-radius-full: 9999px;
+
+  --hirely-spacing-xs: 4px;
+  --hirely-spacing-sm: 8px;
+  --hirely-spacing-md: 16px;
+  --hirely-spacing-lg: 24px;
+  --hirely-spacing-xl: 32px;
+}
