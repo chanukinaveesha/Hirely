@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { changePassword, deactivateAccount, getProfile, updateProfile } from '../../api/profileApi'
 import { useAuthStore } from '../../auth/authStore'
+import AvatarUploader from '../../components/avatar/AvatarUploader'
 import {
   Badge,
   Button,
@@ -119,6 +120,10 @@ export default function ProfilePage() {
         <div className="mb-5 flex flex-wrap gap-2">
           <Badge variant="accent">{profile.role.replaceAll('_', ' ')}</Badge>
           {profile.clientCompanyName && <Badge variant="secondary">{profile.clientCompanyName}</Badge>}
+        </div>
+
+        <div className="mb-5">
+          <AvatarUploader name={profile.name} />
         </div>
 
         <form onSubmit={handleDetailsSubmit} className="flex flex-col gap-4">

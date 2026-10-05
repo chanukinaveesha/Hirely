@@ -34,7 +34,12 @@ public class SecurityConfig {
         "/v3/api-docs/**",
         "/swagger-ui/**",
         "/swagger-ui.html",
-        "/actuator/health"
+        "/actuator/health",
+        // <img src> can't send an Authorization header, so these two binary
+        // image routes are public GETs. No other HTTP method is ever mapped
+        // to either path — uploads/replace/delete stay authenticated.
+        "/api/avatars/*/image",
+        "/api/posts/*/image"
     };
 
     private final JwtService jwtService;

@@ -1,7 +1,10 @@
 import { Outlet } from 'react-router-dom'
 import PortalHeader from './PortalHeader'
 
-const NAV_ITEMS = [{ to: '/admin', label: 'Dashboard' }]
+const NAV_ITEMS = [
+  { to: '/admin', label: 'Dashboard' },
+  { to: '/posts', label: 'Posts' },
+]
 
 export default function AdminLayout() {
   return (
