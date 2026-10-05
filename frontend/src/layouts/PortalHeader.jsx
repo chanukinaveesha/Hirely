@@ -1,5 +1,7 @@
+import { useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useAuthStore } from '../auth/authStore'
+import { useAvatarStore } from '../stores/avatarStore'
 import { Avatar, Button } from '../components/common'
 import HirelyLogo from '../components/brand/HirelyLogo'
 import { cn } from '../utils/cn'
@@ -10,6 +12,11 @@ import { cn } from '../utils/cn'
  */
 export default function PortalHeader({ title, navItems = [] }) {
   const { user, logout } = useAuthStore()
+  const { avatarUrl, loadForUser } = useAvatarStore()
+
+  useEffect(() => {
+    if (user?.id) loadForUser(user.id)
+  }, [user?.id, loadForUser])
 
   return (
     <header className="border-b border-line bg-surface px-6">
@@ -40,7 +47,7 @@ export default function PortalHeader({ title, navItems = [] }) {
         </div>
         <div className="flex items-center gap-3">
           <Link to="/profile" className="flex items-center gap-2 hover:opacity-80">
-            <Avatar name={user?.name} size="sm" />
+            <Avatar name={user?.name} src={avatarUrl} size="sm" />
             <span className="text-small text-ink-secondary">{user?.name}</span>
           </Link>
           <Button variant="ghost" size="sm" onClick={logout}>
