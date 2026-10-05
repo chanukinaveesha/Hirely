@@ -1,6 +1,7 @@
 import { Link, NavLink } from 'react-router-dom'
 import { useAuthStore } from '../auth/authStore'
 import { Avatar, Button } from '../components/common'
+import HirelyLogo from '../components/brand/HirelyLogo'
 import { cn } from '../utils/cn'
 
 /**
@@ -14,7 +15,11 @@ export default function PortalHeader({ title, navItems = [] }) {
     <header className="border-b border-line bg-surface px-6">
       <div className="flex h-16 items-center justify-between">
         <div className="flex items-center gap-8">
-          <span className="text-h4 text-ink-primary">{title}</span>
+          <div className="flex items-center gap-3">
+            <HirelyLogo />
+            <span className="h-5 w-px bg-line" aria-hidden="true" />
+            <span className="text-h4 text-ink-primary">{title}</span>
+          </div>
           <nav className="flex items-center gap-6">
             {navItems.map((item) => (
               <NavLink
