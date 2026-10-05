@@ -8,7 +8,7 @@ const NAV_ITEMS = [
   { to: '/resume', label: 'My Resume' },
   { to: '/interviews', label: 'Interviews' },
   { to: '/assessments', label: 'Assessments' },
-
+  { to: '/posts', label: 'Posts' },
 ]
 
 export default function CandidateLayout() {

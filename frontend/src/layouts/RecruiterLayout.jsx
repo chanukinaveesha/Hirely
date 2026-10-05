@@ -6,17 +6,20 @@ import { ROLES } from '../utils/roles'
 const RECRUITER_NAV_ITEMS = [
   { to: '/recruiter', label: 'Dashboard', end: true },
   { to: '/recruiter/vacancies', label: 'Vacancies' },
+  { to: '/posts', label: 'Posts' },
 ]
 
 const HR_EXECUTIVE_NAV_ITEMS = [
   { to: '/recruiter', label: 'Dashboard', end: true },
   { to: '/recruiter/vacancies', label: 'Vacancies' },
   { to: '/recruiter/assessments', label: 'Assessments' },
+  { to: '/posts', label: 'Posts' },
 ]
 
 const PANEL_MEMBER_NAV_ITEMS = [
   { to: '/recruiter', label: 'Dashboard', end: true },
   { to: '/recruiter/panel-interviews', label: 'My Interviews' },
+  { to: '/posts', label: 'Posts' },
 ]
 
 const NAV_ITEMS_BY_ROLE = {
