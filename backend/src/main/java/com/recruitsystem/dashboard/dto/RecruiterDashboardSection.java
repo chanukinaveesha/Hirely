@@ -9,9 +9,14 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class RecruiterDashboardSection {
+public class RecruiterDashboardSection implements DashboardSection {
 
     private Map<VacancyStatus, Long> vacancyCountsByStatus;
     private long applicantsAwaitingReview;
     private long shortlistedCount;
+
+    @Override
+    public void applyTo(DashboardResponse.DashboardResponseBuilder builder) {
+        builder.recruiter(this);
+    }
 }
