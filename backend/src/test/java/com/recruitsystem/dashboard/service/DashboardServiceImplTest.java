@@ -4,15 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.recruitsystem.dashboard.dto.DashboardResponse;
 import com.recruitsystem.dashboard.dto.DashboardSection;
 import com.recruitsystem.dashboard.strategy.DashboardStrategy;
+import com.recruitsystem.dashboard.strategy.DashboardStrategyFactory;
 import com.recruitsystem.entity.auth.UserRole;
 import com.recruitsystem.post.dto.PostResponse;
 import com.recruitsystem.post.service.PostService;
@@ -26,24 +25,21 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class DashboardServiceImplTest {
 
     @Mock private PostService postService;
+    @Mock private DashboardStrategyFactory dashboardStrategyFactory;
 
     @Test
-    void getDashboard_selectsStrategyMatchingRoleAndIgnoresOthers() {
+    void getDashboard_runsTheStrategyReturnedByTheFactory() {
         when(postService.getRecent(anyInt())).thenReturn(List.of(PostResponse.builder().id(1L).build()));
-        DashboardSection candidateSection = mock(DashboardSection.class);
-        DashboardStrategy candidateStrategy = mock(DashboardStrategy.class);
-        when(candidateStrategy.getRole()).thenReturn(UserRole.JOB_SEEKER);
-        when(candidateStrategy.buildSection(1L)).thenReturn(candidateSection);
+        DashboardSection section = mock(DashboardSection.class);
+        DashboardStrategy strategy = mock(DashboardStrategy.class);
+        when(strategy.buildSection(1L)).thenReturn(section);
+        when(dashboardStrategyFactory.getStrategy(UserRole.JOB_SEEKER)).thenReturn(strategy);
 
-        DashboardStrategy recruiterStrategy = mock(DashboardStrategy.class);
-        when(recruiterStrategy.getRole()).thenReturn(UserRole.RECRUITER);
-
-        DashboardServiceImpl service = new DashboardServiceImpl(postService, List.of(candidateStrategy, recruiterStrategy));
+        DashboardServiceImpl service = new DashboardServiceImpl(postService, dashboardStrategyFactory);
 
         service.getDashboard(1L, UserRole.JOB_SEEKER);
 
-        verify(candidateSection).applyTo(any());
-        verify(recruiterStrategy, never()).buildSection(anyLong());
+        verify(section).applyTo(any());
     }
 
     @Test
@@ -51,10 +47,10 @@ class DashboardServiceImplTest {
         when(postService.getRecent(anyInt())).thenReturn(List.of(PostResponse.builder().id(1L).build()));
         DashboardSection section = mock(DashboardSection.class);
         DashboardStrategy strategy = mock(DashboardStrategy.class);
-        when(strategy.getRole()).thenReturn(UserRole.SYSTEM_ADMINISTRATOR);
         when(strategy.buildSection(5L)).thenReturn(section);
+        when(dashboardStrategyFactory.getStrategy(UserRole.SYSTEM_ADMINISTRATOR)).thenReturn(strategy);
 
-        DashboardServiceImpl service = new DashboardServiceImpl(postService, List.of(strategy));
+        DashboardServiceImpl service = new DashboardServiceImpl(postService, dashboardStrategyFactory);
 
         DashboardResponse response = service.getDashboard(5L, UserRole.SYSTEM_ADMINISTRATOR);
 
@@ -62,8 +58,11 @@ class DashboardServiceImplTest {
     }
 
     @Test
-    void getDashboard_unsupportedRole_throws() {
-        DashboardServiceImpl service = new DashboardServiceImpl(postService, List.of());
+    void getDashboard_propagatesFactoryExceptionForUnsupportedRole() {
+        when(dashboardStrategyFactory.getStrategy(UserRole.JOB_SEEKER))
+                .thenThrow(new IllegalArgumentException("No dashboard strategy registered for role: JOB_SEEKER"));
+
+        DashboardServiceImpl service = new DashboardServiceImpl(postService, dashboardStrategyFactory);
 
         assertThatThrownBy(() -> service.getDashboard(1L, UserRole.JOB_SEEKER))
                 .isInstanceOf(IllegalArgumentException.class);
