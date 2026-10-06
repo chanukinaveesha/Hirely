@@ -58,6 +58,7 @@ export default function PostCard({ post, onDeleted }) {
         <img
           src={toMediaUrl(post.imageUrl)}
           alt=""
+          loading="lazy"
           className="mt-4 max-h-96 w-full rounded-md border border-line object-cover"
         />
       )}
