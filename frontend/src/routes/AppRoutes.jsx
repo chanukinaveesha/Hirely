@@ -3,6 +3,7 @@ import LoginPage from '../pages/auth/LoginPage'
 import RegisterPage from '../pages/auth/RegisterPage'
 import ProfilePage from '../pages/auth/ProfilePage'
 import PostFeedPage from '../pages/post/PostFeedPage'
+import HomePage from '../pages/home/HomePage'
 import PublicProfilePage from '../pages/profile/PublicProfilePage'
 import CandidateDashboardPage from '../pages/CandidateDashboardPage'
 import RecruiterDashboardPage from '../pages/RecruiterDashboardPage'
@@ -90,6 +91,7 @@ export default function AppRoutes() {
         <Route element={<PortalLayoutForRole />}>
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/vacancies/:id" element={<VacancyDetailPage />} />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/posts" element={<PostFeedPage />} />
           <Route path="/people/:userId" element={<PublicProfilePage />} />
         </Route>

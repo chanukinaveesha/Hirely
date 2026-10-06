@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { useAuthStore } from '../../auth/authStore'
 import { ROLES } from '../../utils/roles'
 import { cn } from '../../utils/cn'
 
@@ -16,12 +15,9 @@ export const HOME_ROUTE_BY_ROLE = {
 }
 
 export default function HirelyLogo({ className }) {
-  const role = useAuthStore((state) => state.role)
-  const to = HOME_ROUTE_BY_ROLE[role] ?? '/login'
-
   return (
     <Link
-      to={to}
+      to="/home"
       className={cn(
         'font-heading text-h4 font-bold tracking-tight text-ink-primary transition-colors hover:text-accent',
         className,
