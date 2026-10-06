@@ -5,7 +5,9 @@ import { cn } from '../../utils/cn'
 
 // Mirrors LoginPage.jsx's post-login redirect map — kept local rather than
 // importing from there, since LoginPage.jsx isn't a platform-layer file.
-const HOME_ROUTE_BY_ROLE = {
+// Exported so other platform-layer code (e.g. the home page's dashboard
+// button) can reuse it instead of defining a third copy.
+export const HOME_ROUTE_BY_ROLE = {
   [ROLES.JOB_SEEKER]: '/candidate',
   [ROLES.RECRUITER]: '/recruiter',
   [ROLES.HR_EXECUTIVE]: '/recruiter',
