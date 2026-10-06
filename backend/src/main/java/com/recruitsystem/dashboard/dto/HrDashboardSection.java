@@ -7,8 +7,13 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class HrDashboardSection {
+public class HrDashboardSection implements DashboardSection {
 
     private long assessmentsToEvaluate;
     private long interviewsToSchedule;
+
+    @Override
+    public void applyTo(DashboardResponse.DashboardResponseBuilder builder) {
+        builder.hr(this);
+    }
 }
